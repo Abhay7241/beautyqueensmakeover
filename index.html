@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty Queens Makeover Salon & Cosmetics</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Variables - Light Theme */
+        :root {
+            --primary: #e84393;
+            --primary-dark: #d63031;
+            --gold: #d4af37;
+            
+            /* Theme Colors */
+            --bg-main: #fcf9fa;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            
+            /* Glassmorphism Variables */
+            --bg-nav: rgba(255, 255, 255, 0.75);
+            --bg-card: rgba(255, 255, 255, 0.6);
+            --bg-review: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-border-hover: rgba(232, 67, 147, 0.5);
+            --shadow: rgba(0, 0, 0, 0.05);
+            --shadow-hover: rgba(232, 67, 147, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.8);
+            --footer-bg: rgba(45, 52, 54, 0.95);
+        }
+
+        /* Dark Theme Variables */
+        body.dark-mode {
+            --bg-main: #0f0b14;
+            --text-main: #f5f6fa;
+            --text-muted: #b2bec3;
+            
+            --bg-nav: rgba(15, 11, 20, 0.75);
+            --bg-card: rgba(30, 25, 40, 0.4);
+            --bg-review: rgba(30, 25, 40, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(232, 67, 147, 0.8);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(232, 67, 147, 0.3);
+            --input-bg: rgba(20, 15, 30, 0.6);
+            --footer-bg: rgba(10, 8, 15, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Orbs */
+        .ambient-shape { position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.6; pointer-events: none; transition: all 1s ease; }
+        .shape-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(232, 67, 147, 0.3); }
+        .shape-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: rgba(212, 175, 55, 0.25); }
+        body.dark-mode .shape-1 { background: rgba(232, 67, 147, 0.15); }
+        body.dark-mode .shape-2 { background: rgba(212, 175, 55, 0.1); }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        
+        /* Glass Navbar */
+        header { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed; width: 100%; top: 0; z-index: 1000; 
+            padding: 15px 5vw; display: flex; justify-content: space-between; align-items: center; 
+            transition: all 0.5s ease;
+        }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; flex-direction: column; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo span { font-size: 11px; color: var(--text-main); font-family: 'Poppins', sans-serif; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        
+        nav { display: flex; align-items: center; gap: 20px; }
+        nav a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: color 0.3s; font-size: 0.95rem; }
+        nav a:hover { color: var(--primary); }
+        .btn-nav { background: var(--primary); color: #fff !important; padding: 10px 25px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(232, 67, 147, 0.3); transition: transform 0.3s, box-shadow 0.3s; white-space: nowrap;}
+        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232, 67, 147, 0.5); }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--bg-card); border: 1px solid var(--glass-border); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px); flex-shrink: 0;
+        }
+        .theme-toggle:hover { background: var(--glass-border-hover); color: #fff; transform: rotate(15deg); }
+        .theme-toggle svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* Hero Section */
+        .hero { 
+            height: 100vh; min-height: 600px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: #fff; padding: 0 5vw; 
+        }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 10px; animation: fadeInDown 1s ease; text-shadow: 0 5px 15px rgba(0,0,0,0.3); line-height: 1.2;}
+        .hero h2 { font-size: clamp(1.2rem, 3vw, 2rem); font-family: 'Poppins', sans-serif; font-weight: 300; margin-bottom: 20px; color: var(--gold); letter-spacing: 2px;}
+        .hero p { font-size: clamp(1rem, 2vw, 1.1rem); margin-bottom: 40px; font-weight: 300; animation: fadeInUp 1s ease; max-width: 600px; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .btn-hero { background: linear-gradient(45deg, var(--primary), var(--primary-dark)); color: #fff; padding: 15px 40px; text-decoration: none; font-size: 1.1rem; border-radius: 30px; font-weight: 500; letter-spacing: 1px; transition: transform 0.3s, box-shadow 0.3s; animation: fadeInUp 1.2s ease; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
+        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(232, 67, 147, 0.5); }
+
+        /* Glass Utility Classes */
+        .glass-panel {
+            background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); box-shadow: 0 8px 32px var(--shadow);
+            border-radius: 20px; transition: all 0.4s ease;
+        }
+
+        /* Stats Section */
+        .stats-wrapper { padding: 0 5vw; margin-top: -40px; position: relative; z-index: 10; }
+        .stats { display: flex; justify-content: space-evenly; gap: 30px; padding: 30px 20px; flex-wrap: wrap; }
+        .stat-item { text-align: center; flex: 1; min-width: 150px;}
+        .stat-item h3 { font-size: 2.2rem; color: var(--gold); text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2); }
+        .stat-item p { font-weight: 500; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); margin-top: 5px; }
+
+        /* Section Headings */
+        .section-title { text-align: center; margin: 100px 0 50px; font-size: clamp(2rem, 5vw, 2.8rem); color: var(--text-main); position: relative; padding: 0 20px;}
+        .section-title span { color: var(--primary); }
+
+        /* Services Grid */
+        .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 0 5vw; margin-bottom: 80px; }
+        .card { overflow: hidden; display: flex; flex-direction: column; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px var(--shadow-hover); border-color: var(--glass-border-hover); }
+        .card img { width: 100%; height: 240px; object-fit: cover; transition: transform 0.5s ease; }
+        .card:hover img { transform: scale(1.05); }
+        .card-content { padding: 30px 25px; flex-grow: 1;}
+        .card h3 { font-size: 1.6rem; margin-bottom: 12px; color: var(--text-main); }
+        .card p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* Gallery Section */
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 0 5vw; margin-bottom: 100px; }
+        .gallery-item { overflow: hidden; border-radius: 15px; box-shadow: 0 8px 25px var(--shadow); position: relative; }
+        .gallery-item::after { content: ''; position: absolute; inset: 0; border-radius: 15px; border: 1px solid var(--glass-border); pointer-events: none; }
+        .gallery-item img { width: 100%; height: 280px; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: block; }
+        .gallery-item:hover img { transform: scale(1.1); filter: brightness(1.1); }
+
+        /* Reviews Section */
+        .reviews { padding: 60px 5vw 100px; position: relative; }
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .review-card { padding: 30px; border-left: 4px solid var(--gold); border-radius: 0 20px 20px 0; background: var(--bg-review); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 8px 32px var(--shadow); border: 1px solid var(--glass-border); border-left: 4px solid var(--gold); }
+        .stars { color: var(--gold); font-size: 1.4rem; margin-bottom: 15px; letter-spacing: 2px;}
+        .review-text { font-style: italic; margin-bottom: 20px; color: var(--text-main); font-size: 1.05rem; line-height: 1.7;}
+        .reviewer { font-weight: 700; font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.1rem;}
+
+        /* Booking Section */
+        .booking-section { padding: 0 5vw 100px; display: flex; justify-content: center; align-items: center; }
+        .booking-container { max-width: 550px; width: 100%; padding: 40px; }
+        .booking-container h2 { text-align: center; margin-bottom: 10px; font-size: 2.2rem; }
+        .booking-container p.subtitle { text-align: center; margin-bottom: 30px; color: var(--text-muted); }
+        
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 500; font-size: 0.95rem; color: var(--text-main); }
+        .form-control { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 12px; font-family: inherit; font-size: 1rem; outline: none; transition: all 0.3s; backdrop-filter: blur(5px); }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(232, 67, 147, 0.2); background: var(--bg-card); }
+        select option { background: var(--bg-main); color: var(--text-main); }
+
+        .btn-whatsapp { width: 100%; background: linear-gradient(45deg, #25D366, #1ebd5a); color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-whatsapp:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4); }
+
+        /* Footer & Instagram Link */
+        footer { background: var(--footer-bg); color: #fff; padding: 70px 5vw 30px; border-top: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(20px); }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; }
+        .footer-col p { margin-bottom: 12px; font-size: 0.95rem; color: #b2bec3; display: flex; align-items: center; gap: 10px; }
+        
+        .ig-link { 
+            color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; background: rgba(232, 67, 147, 0.1); border-radius: 8px; border: 1px solid rgba(232, 67, 147, 0.2);
+        }
+        .ig-link:hover { background: rgba(232, 67, 147, 0.2); transform: translateX(5px); color: #fff;}
+        .ig-link svg { fill: currentColor; }
+
+        .copyright { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; font-size: 0.85rem; color: #636e72; text-align: center; }
+
+        /* Animations */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        
+        /* Tablets & iPads (1024px and below) */
+        @media (max-width: 1024px) {
+            header { padding: 15px 4vw; }
+            .stats { gap: 15px; padding: 25px 15px; }
+        }
+
+        /* Large Mobile Phones (768px and below) */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px; }
+            .logo { align-items: center; text-align: center; }
+            
+            .stats-wrapper { margin-top: -20px; }
+            .stats { flex-direction: column; gap: 20px; }
+            .stat-item { border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
+            .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+            
+            .section-title { margin: 70px 0 35px; }
+            .booking-container { padding: 30px 20px; }
+        }
+
+        /* Small Mobile Phones (480px and below) */
+        @media (max-width: 480px) {
+            nav a { font-size: 0.85rem; margin: 0 5px; }
+            .btn-nav { padding: 8px 15px; font-size: 0.85rem; }
+            .theme-toggle { width: 35px; height: 35px; }
+            .theme-toggle svg { width: 16px; height: 16px; }
+            
+            .hero { padding: 0 20px; }
+            .btn-hero { padding: 12px 30px; font-size: 1rem; }
+            
+            .footer-content { text-align: center; }
+            .footer-col p { justify-content: center; }
+            .ig-link { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Orbs -->
+    <div class="ambient-shape shape-1"></div>
+    <div class="ambient-shape shape-2"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            Beauty Queens
+            <span>Makeover Salon & Cosmetics</span>
+        </a>
+        <nav>
+            <a href="#services">Services</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#reviews">Reviews</a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                <!-- Sun Icon -->
+                <svg id="icon-sun" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/></svg>
+                <!-- Moon Icon -->
+                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"/></svg>
+            </button>
+            <a href="#book" class="btn-nav">Book Now</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Beauty Queens Makeover</h1>
+        <h2>SALON & COSMETICS</h2>
+        <p>Your ultimate destination for professional beauty services, branded cosmetics, and affordable luxury in Lucknow.</p>
+        <a href="#book" class="btn-hero">Book an Appointment</a>
+    </section>
+
+    <!-- Quick Stats -->
+    <div class="stats-wrapper">
+        <section class="stats glass-panel">
+            <div class="stat-item">
+                <h3>5.0 ⭐</h3>
+                <p>166+ Reviews</p>
+            </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Women-Owned</p>
+            </div>
+            <div class="stat-item">
+                <h3>#1</h3>
+                <p>Top Rated Salon</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Services Section -->
+    <h2 class="section-title" id="services">Our <span>Services</span></h2>
+    <section class="services">
+        <div class="card glass-panel">
+            <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Facial and Skincare">
+            <div class="card-content">
+                <h3>Facial & Skincare</h3>
+                <p>Rejuvenate your skin with our professional facial treatments, utilizing top-tier branded products for a glowing complexion.</p>
+            </div>
+        </div>
+        
+        <div class="card glass-panel">
+            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bridal Makeup">
+            <div class="card-content">
+                <h3>Bridal Makeup</h3>
+                <p>Make your special day unforgettable with our expert bridal makeup, styling assistance, and pre-bridal grooming.</p>
+            </div>
+        </div>
+        
+        <div class="card glass-panel">
+            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Hair Styling">
+            <div class="card-content">
+                <h3>Hair & Styling</h3>
+                <p>From modern cuts to perfect coloring and spa treatments, our experienced staff provides expert hair care.</p>
+            </div>
+        </div>
+
+        <div class="card glass-panel">
+            <img src="https://images.unsplash.com/photo-1596462502278-27bf85033e5a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cosmetics Shop">
+            <div class="card-content">
+                <h3>Cosmetics Store</h3>
+                <p>Shop 100% genuine and branded beauty, skin care, and hair care products at reasonable and affordable prices.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <h2 class="section-title" id="gallery">Our <span>Gallery</span></h2>
+    <section class="gallery">
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Salon Interior">
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Makeup Client">
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Hair Treatment">
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1599305090598-fe179d501227?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cosmetics Products">
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <h2 class="section-title">What Our <span>Queens Say</span></h2>
+    <section class="reviews" id="reviews">
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"Facial, eyebrow and all beauty services are very nice and good with valuable prices."</p>
+                <p class="reviewer">- Arti Verma</p>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"Best parlor and cosmetics shop please visit."</p>
+                <p class="reviewer">- Ankita Sinha</p>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"All experienced staff and good atmosphere and services are best. All beauty products available here and reasonable price."</p>
+                <p class="reviewer">- Shashi Kant</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <h2 class="section-title">Book Your <span>Slot</span></h2>
+    <section class="booking-section" id="book">
+        <div class="booking-container glass-panel">
+            <p class="subtitle">Skip the wait! Book directly via WhatsApp.</p>
+            
+            <form id="bookingForm" onsubmit="bookViaWhatsApp(event)">
+                <div class="form-group">
+                    <label for="customerName">Your Name</label>
+                    <input type="text" id="customerName" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="serviceOpted">Select Service</label>
+                    <select id="serviceOpted" class="form-control" required>
+                        <option value="" disabled selected>Choose a service...</option>
+                        <option value="Bridal Makeup">Bridal Makeup</option>
+                        <option value="Party Makeup">Party Makeup</option>
+                        <option value="Facial & Skin Care">Facial & Skin Care</option>
+                        <option value="Hair Styling & Cut">Hair Styling & Cut</option>
+                        <option value="Waxing & Threading">Waxing & Threading</option>
+                        <option value="Cosmetic Inquiry">Cosmetic Product Inquiry</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="appointmentDate">Preferred Date</label>
+                    <input type="date" id="appointmentDate" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn-whatsapp">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    Book via WhatsApp
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>Beauty Queens</h3>
+                <p>Makeover Salon & Cosmetics</p>
+                <p>Highly rated women-owned beauty parlour ensuring the best of services in a friendly environment.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contact & Hours</h3>
+                <p>📞 Phone: 079913 83339</p>
+                <p>🕒 Open Today: Closes at 8:00 PM</p>
+                <p style="margin-top: 15px;">
+                    <!-- Added Instagram Link Here -->
+                    <a href="https://www.instagram.com/vinitavishwakarma129?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="ig-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        Follow on Instagram
+                    </a>
+                </p>
+            </div>
+            <div class="footer-col">
+                <h3>Location</h3>
+                <p>Narpatganj Chauraha, Nagram - Nilmatha Road</p>
+                <p>Near Pal Traders, Sarthuwa</p>
+                <p>Lucknow, Uttar Pradesh – 226301</p>
+                <p>Plus Code: PXXX+J7 Lucknow</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 Beauty Queens Makeover Salon & Cosmetics. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- WhatsApp Booking Function ---
+        function bookViaWhatsApp(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('customerName').value;
+            const service = document.getElementById('serviceOpted').value;
+            const date = document.getElementById('appointmentDate').value;
+            
+            const phoneNumber = "917991383339"; 
+            const message = `Hello Beauty Queens Makeover Salon! 🌸\n\nMy name is *${name}*.\nI would like to book an appointment for: *${service}*\nPreferred Date: *${date}*\n\nPlease confirm my booking. Thank you!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappURL, '_blank');
+        }
+
+        // --- Set minimum date for booking form ---
+        const dateInput = document.getElementById('appointmentDate');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+
+        // --- Dark/Light Mode Toggle Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+        const body = document.body;
+
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            iconMoon.style.display = 'none';
+            iconSun.style.display = 'block';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                iconMoon.style.display = 'none';
+                iconSun.style.display = 'block';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                iconSun.style.display = 'none';
+                iconMoon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
